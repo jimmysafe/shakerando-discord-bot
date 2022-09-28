@@ -2,7 +2,7 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM amd64/node:16-alpine As development
+FROM node:16-alpine As development
 
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node yarn.lock ./
@@ -17,7 +17,7 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM amd64/node:16-alpine As build
+FROM node:16-alpine As build
 
 ARG TOKEN
 ARG CLIENT_ID
@@ -40,7 +40,7 @@ USER node
 # PRODUCTION
 ###################
 
-FROM amd64/node:16-alpine As production
+FROM node:16-alpine As production
 
 
 # Copy the bundled code from the build stage to the production image
