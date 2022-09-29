@@ -9,7 +9,9 @@ dotenv.config();
 const client = new ClientService().init();
 const commandsService = new CommandsService(client);
 
-client.on("ready", () => console.log(`🚀 Logged in as ${client?.user?.tag}`));
+client.on("ready", () =>
+  console.log(`🚀 Logged in as ${client?.user?.tag} 🚀`)
+);
 /**
  * ON GUILD JOIN
  * Add slash commands into that guild.
