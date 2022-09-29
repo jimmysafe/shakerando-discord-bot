@@ -28,6 +28,8 @@ COPY --chown=node:node package*.json ./
 
 COPY --chown=node:node . .
 
+RUN yarn
+
 RUN yarn build
 
 ENV NODE_ENV production

@@ -5,7 +5,7 @@
   "license": "MIT",
   "author": "jimmysafe",
   "scripts": {
-    "build": "npx tsc",
+    "build": "tsc",
     "dev": "nodemon src/index.ts",
     "start": "node dist/index.js"
   },
