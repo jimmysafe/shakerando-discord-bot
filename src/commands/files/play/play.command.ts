@@ -30,13 +30,14 @@ export default {
     let embed: EmbedBuilder | null = null;
 
     const url = interaction.options.getString("url");
+    const searchterms = interaction.options.getString("searchterms");
     const subcommand = interaction.options.getSubcommand();
 
     /**
      *! SONG CASE
      */
     if (subcommand === "song") {
-      if (!url) return;
+      if (!url) return interaction.editReply("No URL");
       const result = await client.player.search(url, {
         requestedBy: interaction.user,
         searchEngine: QueryType.YOUTUBE_VIDEO,
@@ -82,8 +83,8 @@ export default {
      *! SEARCH CASE
      */
     if (subcommand === "search") {
-      if (!url) return;
-      const result = await client.player.search(url, {
+      if (!searchterms) return interaction.editReply("No Search term");
+      const result = await client.player.search(searchterms, {
         requestedBy: interaction.user,
         searchEngine: QueryType.AUTO,
       });

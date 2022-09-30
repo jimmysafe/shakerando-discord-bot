@@ -46,7 +46,8 @@ export class CommandsService {
           body: this.commands(),
         }
       );
-      if (res) console.log("Success Loading REST Commands.", res);
+      // @ts-expect-error
+      if (res) console.log("Success Loading REST Commands.", res.length);
     } catch (err) {
       console.log(err);
     }
