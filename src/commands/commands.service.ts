@@ -27,7 +27,7 @@ export class CommandsService {
     return commands;
   }
 
-  private commands() {
+  public commands() {
     const files = this.getFiles();
     return files.map((file) => {
       const cmd = require(`${__dirname}/files/${file.split(".")[0]}/${file}`)

@@ -15,7 +15,7 @@ export default {
 
     if (!interactionMember.voice.channel)
       return interaction.editReply(
-        "You need to be in a VC to use this command"
+        "You need to be in a Voice Channel to use this command"
       );
 
     const queue = client.player.createQueue(
@@ -27,11 +27,15 @@ export default {
         interactionMember.voice.channel as GuildChannelResolvable
       );
 
-    let embed = new EmbedBuilder();
+    let embed: EmbedBuilder | null = null;
 
     const url = interaction.options.getString("url");
+    const subcommand = interaction.options.getSubcommand();
 
-    const song = async () => {
+    /**
+     *! SONG CASE
+     */
+    if (subcommand === "song") {
       if (!url) return;
       const result = await client.player.search(url, {
         requestedBy: interaction.user,
@@ -44,15 +48,18 @@ export default {
       const song = result.tracks[0];
       queue.addTrack(song);
 
-      return embed
+      embed = new EmbedBuilder()
         .setDescription(
           `**[${song.title}](${song.url})** has been added to the Queue`
         )
         .setThumbnail(song.thumbnail)
         .setFooter({ text: `Duration: ${song.duration}` });
-    };
+    }
 
-    const playlist = async () => {
+    /**
+     *! PLAYLIST CASE
+     */
+    if (subcommand === "playlist") {
       if (!url) return;
       const result = await client.player.search(url, {
         requestedBy: interaction.user,
@@ -64,14 +71,17 @@ export default {
 
       const playlist = result.playlist;
       queue.addTracks(result.tracks);
-      return embed
+      embed = new EmbedBuilder()
         .setDescription(
           `**${result.tracks.length} songs from [${playlist?.title}](${playlist?.url})** have been added to the Queue`
         )
         .setThumbnail(playlist?.thumbnail ?? null);
-    };
+    }
 
-    const search = async () => {
+    /**
+     *! SEARCH CASE
+     */
+    if (subcommand === "search") {
       if (!url) return;
       const result = await client.player.search(url, {
         requestedBy: interaction.user,
@@ -81,22 +91,15 @@ export default {
         return interaction.editReply("No results");
       const song = result.tracks[0];
       queue.addTrack(song);
-      return embed
+      embed = new EmbedBuilder()
         .setDescription(
           `**[${song.title}](${song.url})** has been added to the Queue`
         )
         .setThumbnail(song.thumbnail)
         .setFooter({ text: `Duration: ${song.duration}` });
-    };
-
-    switch (interaction.options.getSubcommand()) {
-      case "song":
-        return song();
-      case "playlist":
-        return playlist();
-      case "search":
-        return search();
     }
+
+    if (!embed) return interaction.editReply("Oops.. Embed Error.");
 
     if (!queue.playing) await queue.play();
     return interaction.editReply({

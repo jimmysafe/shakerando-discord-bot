@@ -13,7 +13,7 @@ export default {
 
     queue.setPaused(false);
     return interaction.editReply(
-      "Music has been paused! Use `/pause` to resume the music"
+      "Music has been resumed! Use `/pause` to pause the music"
     );
   },
 } as ICommand;

@@ -24,7 +24,16 @@ client.on("guildCreate", (guild) => commandsService.httpPushCommands(guild.id));
 client.on("interactionCreate", async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
+  if (client.commands.size === 0) {
+    if (!interaction?.guild?.id) return;
+
+    console.log("Empty command list, refreshing");
+    commandsService.commands();
+    await commandsService.httpPushCommands(interaction.guild.id);
+  }
+
   const command = client.commands.get(interaction.commandName) as ICommand;
+
   if (!command) interaction.reply("Not a valid command");
 
   await interaction.deferReply();
