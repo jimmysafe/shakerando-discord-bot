@@ -46,7 +46,7 @@ export class CommandsService {
           body: this.commands(),
         }
       );
-      if (res) console.log("Success Loading REST Commands.");
+      if (res) console.log("Success Loading REST Commands.", res);
     } catch (err) {
       console.log(err);
     }
